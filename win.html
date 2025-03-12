@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Challenge Complete!</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .message {
+            margin-bottom: 1.5rem;
+            font-style: italic;
+            padding: 15px;
+            border: 1px dashed #999;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        
+        .treasure-card {
+            width: 200px;
+            height: 260px;
+            perspective: 1000px;
+            margin: 30px auto;
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transform-style: preserve-3d;
+            animation: rotateCard 5s infinite alternate;
+        }
+        
+        @keyframes rotateCard {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(180deg); }
+        }
+        
+        .card-front, .card-back {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background: #fff;
+        }
+        
+        .card-back {
+            transform: rotateY(180deg);
+            background: #f0d080;
+        }
+        
+        .card-image {
+            width: 80%;
+            height: 80%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        
+        .card-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .redirect-info {
+            margin-top: 2rem;
+            padding: 10px;
+            background: #ddd;
+            border-radius: 5px;
+        }
+        
+        #countdown {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .play-again {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 8px 16px;
+            background: #ddd;
+            border: 1px solid #999;
+            border-radius: 3px;
+            text-decoration: none;
+            color: #333;
+        }
+        
+        .play-again:hover {
+            background: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <h1>Treasure Found!</h1>
+    
+    <div class="message">
+        "Ye've proven yerself worthy! Ye measured exactly 4 units of rum in <span id="final-moves">0</span> moves!"
+    </div>
+    
+    <div class="treasure-card">
+        <div class="card-inner">
+            <div class="card-front">
+                <div class="card-image">
+                    <img src="./b.png" alt="Puzzle Solved">
+                </div>
+                <div>Puzzle Solved!</div>
+            </div>
+            <div class="card-back">
+                <div class="card-image">
+                    <img src="./f.jpeg" alt="Treasure Found">
+                </div>
+                <div>Treasure Found!</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="redirect-info">
+        Redirecting to feedback form in <span id="countdown">15</span> seconds...
+    </div>
+    
+    <a href="index.html" class="play-again">Play Again</a>
+
+    <script>
+        // Display the number of moves
+        const moves = localStorage.getItem("moves") || "0";
+        document.getElementById("final-moves").textContent = moves;
+        
+        // Countdown for redirect
+        let secondsLeft = 15;
+        const countdownElement = document.getElementById("countdown");
+        
+        const countdownInterval = setInterval(() => {
+            secondsLeft--;
+            countdownElement.textContent = secondsLeft;
+            
+            if (secondsLeft <= 0) {
+                clearInterval(countdownInterval);
+                // Redirect to Google form instead of the game
+                window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSc_VB_2bODsMvn5RlciD1nONL6cZ7AiUst0zcQpoXrprimSiw/viewform"; 
+            }
+        }, 1000);
+        
+        // Clear countdown on Play Again click
+        document.querySelector('.play-again').addEventListener('click', () => {
+            clearInterval(countdownInterval);
+        });
+    </script>
+</body>
+</html>

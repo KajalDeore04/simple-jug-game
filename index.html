@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Rum Challenge</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        h1 {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .goal {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .containers {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+        
+        .container {
+            width: 45%;
+            text-align: center;
+        }
+        
+        .vessel {
+            height: 150px;
+            border: 2px solid #333;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+        
+        .barrel { border-radius: 10px; }
+        
+        .mug { 
+            border-radius: 5px 5px 15px 15px;
+        }
+        
+        .liquid {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: #8B4513;
+            transition: height 0.3s;
+        }
+        
+        .label {
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        button {
+            background: #ddd;
+            border: 1px solid #999;
+            border-radius: 3px;
+            padding: 5px 10px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        
+        button:hover {
+            background: #ccc;
+        }
+        
+        .actions {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .hints {
+            margin-top: 2rem;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .hint {
+            opacity: 0.2;
+            transition: opacity 1s ease-in-out;
+            margin: 5px 0;
+        }
+        
+        .hint.show {
+            opacity: 1;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Minimalist Rum Challenge</h1>
+    
+    <div class="goal">Goal: Measure exactly <strong>4 units</strong> of rum</div>
+    
+    <div class="containers">
+        <!-- 5L Barrel -->
+        <div class="container">
+            <div class="vessel barrel" id="barrel5">
+                <div class="liquid" id="liquid5"></div>
+            </div>
+            <div class="label">5-Unit Barrel</div>
+            <button id="fill5">Fill</button>
+            <button id="empty5">Empty</button>
+        </div>
+        
+        <!-- 3L Mug -->
+        <div class="container">
+            <div class="vessel mug" id="mug3">
+                <div class="liquid" id="liquid3"></div>
+            </div>
+            <div class="label">3-Unit Mug</div>
+            <button id="fill3">Fill</button>
+            <button id="empty3">Empty</button>
+        </div>
+    </div>
+    
+    <div class="actions">
+        <button id="transfer5to3">Barrel → Mug</button>
+        <button id="transfer3to5">Mug → Barrel</button>
+    </div>
+    
+    <div class="hints">
+        <ul id="hint-list">
+            <li class="hint" id="hint1">Fill the 5L barrel completely.</li>
+            <li class="hint" id="hint2">Pour from the 5L barrel into the 3L mug until it is full.</li>
+            <li class="hint" id="hint3">Empty the 3L mug.</li>
+            <li class="hint" id="hint4">Transfer the remaining 2L from the 5L barrel to the 3L mug.</li>
+            <li class="hint" id="hint5">Fill the 5L barrel again.</li>
+            <li class="hint" id="hint6">Pour from the 5L barrel into the 3L mug until it is full.</li>
+            <li class="hint" id="hint7">Now, the 5L barrel contains exactly 4L! 🎉</li>
+        </ul>
+    </div>
+
+    <script>
+        // Game state
+        let barrel5Content = 0;
+        let mug3Content = 0;
+        let moveCounter = 0;
+        
+        // DOM Elements
+        const barrel5El = document.getElementById('barrel5');
+        const mug3El = document.getElementById('mug3');
+        const liquid5El = document.getElementById('liquid5');
+        const liquid3El = document.getElementById('liquid3');
+        
+        // Update visual state
+        function updateDisplay() {
+            liquid5El.style.height = (barrel5Content / 5 * 100) + '%';
+            liquid3El.style.height = (mug3Content / 3 * 100) + '%';
+        }
+        
+        // Button event listeners
+        document.getElementById('fill5').addEventListener('click', () => {
+            barrel5Content = 5;
+            updateDisplay();
+            checkWin();
+        });
+        
+        document.getElementById('fill3').addEventListener('click', () => {
+            mug3Content = 3;
+            updateDisplay();
+            checkWin();
+        });
+        
+        document.getElementById('empty5').addEventListener('click', () => {
+            barrel5Content = 0;
+            updateDisplay();
+        });
+        
+        document.getElementById('empty3').addEventListener('click', () => {
+            mug3Content = 0;
+            updateDisplay();
+        });
+        
+        document.getElementById('transfer5to3').addEventListener('click', () => {
+            const transferAmount = Math.min(barrel5Content, 3 - mug3Content);
+            barrel5Content -= transferAmount;
+            mug3Content += transferAmount;
+            updateDisplay();
+            checkWin();
+        });
+        
+        document.getElementById('transfer3to5').addEventListener('click', () => {
+            const transferAmount = Math.min(mug3Content, 5 - barrel5Content);
+            mug3Content -= transferAmount;
+            barrel5Content += transferAmount;
+            updateDisplay();
+            checkWin();
+        });
+        
+        // Check win condition
+        function checkWin() {
+            if (barrel5Content === 4 || mug3Content === 4) {
+                // Store moves for win page
+                localStorage.setItem("moves", moveCounter);
+                // Redirect to win page
+                window.location.href = "win.html";
+            }
+        }
+        
+        // Show hints progressively
+        const hints = document.querySelectorAll(".hint");
+        let delay = 1000; // Start revealing after 1 second
+        
+        hints.forEach((hint, index) => {
+            setTimeout(() => {
+                hint.classList.add("show");
+            }, delay);
+            delay += 3000; // Each hint appears every 3 seconds
+        });
+        
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
