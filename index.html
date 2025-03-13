@@ -2,27 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Water Jug Puzzle</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-  <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/manifest.json">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-<meta name="theme-color" content="#ffffff">
-
   <style>
     :root {
       --primary-color: #1a73e8;
@@ -36,72 +18,89 @@
       --button-hover: #0d47a1;
     }
 
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
     html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      position: fixed;
+      touch-action: manipulation;
+    }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  color: var(--text-color);
-  overflow: hidden; /* Allows scrolling if needed */
-}
+    body {
+      font-family: Arial, sans-serif;
+      background-color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-color);
+    }
 
-.container {
-  width: 90%;
-  max-width: 600px;
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  padding: 20px;
-  margin: 20px auto;
-  height: 100%;
-}
-
+    .container {
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+    }
 
     h1 {
       text-align: center;
       color: var(--primary-color);
-      margin-bottom: 10px;
-      font-size: 1.8rem;
+      margin: 5px 0 10px 0;
+      font-size: 1.5rem;
     }
 
     .instructions {
       background-color: #f1f3f4;
-      padding: 15px;
+      padding: 10px;
       border-radius: 8px;
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-      line-height: 1.4;
+      margin-bottom: 15px;
+      font-size: 0.85rem;
+      line-height: 1.3;
       border-left: 4px solid var(--primary-color);
+      flex-shrink: 0;
+    }
+
+    .instructions p {
+      margin: 5px 0;
+    }
+
+    .instructions ul {
+      margin: 5px 0;
+      padding-left: 20px;
     }
 
     .goal {
       text-align: center;
       font-weight: bold;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       color: var(--secondary-color);
+      font-size: 0.95rem;
     }
 
     .game-area {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 20px;
+      flex-grow: 1;
+      margin-bottom: 10px;
     }
 
     .buckets-container {
       display: flex;
       justify-content: space-around;
       width: 100%;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
+      flex-grow: 1;
     }
 
     .bucket {
@@ -109,7 +108,8 @@ body {
       flex-direction: column;
       align-items: center;
       position: relative;
-      width: 120px;
+      width: 40%;
+      max-width: 120px;
     }
 
     .tap {
@@ -122,25 +122,24 @@ body {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
       color: white;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
       transition: all 0.3s;
     }
 
-    .tap:hover {
+    .tap:active {
       background-color: #757575;
       transform: scale(1.1);
     }
 
     .bucket-visual {
-      width: 80px;
+      width: 100%;
       border: 3px solid var(--bucket-border);
       border-radius: 0 0 10px 10px;
       background-color: #d3d3d3;
       position: relative;
       overflow: hidden;
-      cursor: grab;
       margin-bottom: 10px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       transition: transform 0.2s;
@@ -151,26 +150,25 @@ body {
     }
 
     #bucket5 .bucket-visual {
-      height: 150px; /* Larger bucket for 5L */
+      height: 140px;
     }
 
     #bucket3 .bucket-visual {
-      height: 100px; /* Smaller bucket for 3L */
+      height: 90px;
     }
 
     .bucket-visual:active {
-      cursor: grabbing;
       transform: scale(1.05);
     }
 
     .bucket-label {
       position: absolute;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: bold;
       color: white;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-      z-index: 2; /* Ensures it stays above the water */
-      pointer-events: none; /* Prevents interaction */
+      z-index: 2;
+      pointer-events: none;
     }
 
     .water {
@@ -186,6 +184,7 @@ body {
       text-align: center;
       font-weight: bold;
       margin-top: 5px;
+      font-size: 0.9rem;
     }
 
     .valve {
@@ -198,13 +197,13 @@ body {
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 18px;
       color: white;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
       transition: all 0.3s;
     }
 
-    .valve:hover {
+    .valve:active {
       background-color: #d32f2f;
       transform: scale(1.1);
     }
@@ -212,7 +211,8 @@ body {
     .actions {
       display: flex;
       justify-content: center;
-      margin-top: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
 
     button {
@@ -227,24 +227,23 @@ body {
       transition: background-color 0.3s;
     }
 
-    button:hover {
+    button:active {
       background-color: var(--button-hover);
     }
 
     .drag-hint {
       text-align: center;
-      margin-top: 10px;
+      margin-top: 5px;
       color: #757575;
       font-style: italic;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
 
-    /* FIXED: Water level markings - properly positioned outside the bucket */
     .water-markings {
       position: absolute;
-      right: -25px; /* Position markings outside the bucket */
+      right: -20px;
       height: 100%;
-      width: 30px; /* Width for the markings area */
+      width: 20px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -260,8 +259,8 @@ body {
 
     .marking-line {
       position: absolute;
-      left: -12px;
-      width: 10px;
+      left: -5px;
+      width: 5px;
       height: 1px;
       background-color: rgba(0, 0, 0, 0.7);
     }
@@ -269,62 +268,36 @@ body {
     .marking-text {
       position: absolute;
       right: 0;
-      font-size: 0.75rem;
+      font-size: 0.65rem;
       font-weight: bold;
-      padding: 1px 3px;
+      padding: 1px;
       color: #333;
     }
 
     .current-level {
       position: absolute;
-      right: -42px;
+      right: -32px;
       color: var(--primary-color);
       font-weight: bold;
       background-color: rgba(255, 255, 255, 0.8);
-      padding: 2px 4px;
-      border-radius: 4px;
+      padding: 1px 3px;
+      border-radius: 3px;
       border: 1px solid var(--primary-color);
-      font-size: 1rem;
+      font-size: 0.8rem;
       transition: all 0.5s ease-out;
       z-index: 3;
     }
 
-    /* Responsive adjustments */
-    @media (max-width: 480px) {
-      .container {
-        width: 95%;
-        padding: 15px;
-      }
-      
-      h1 {
-        font-size: 1.5rem;
-      }
-      
-      .current-level {
-        right: -35px;
-        font-size: 0.9rem;
-      }
-      
-      .buckets-container {
-        width: 90%;
-      }
-      
-      .marking-text {
-        right: 0;
-        font-size: 0.6rem;
-      }
-    }
-
     #game-screen, #win-screen {
       display: none;
+      height: 100%;
     }
 
-    /* Win screen styles */
     .card-container {
       perspective: 1000px;
-      width: 200px;
-      height: 250px;
-      margin: 20px auto;
+      width: 180px;
+      height: 220px;
+      margin: 15px auto;
     }
 
     .card {
@@ -353,12 +326,11 @@ body {
     }
 
     .card-face img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Ensures the image covers the entire area without distortion */
-  border-radius: 10px; /* Matches the card's border radius */
-}
-
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
    
     .card-back {
       transform: rotateY(180deg);
@@ -398,8 +370,8 @@ body {
 
     .win-message {
       text-align: center;
-      margin: 20px 0;
-      font-size: 1.8rem;
+      margin: 15px 0;
+      font-size: 1.5rem;
       color: var(--secondary-color);
       font-weight: bold;
       animation: pulse 2s infinite;
@@ -413,9 +385,10 @@ body {
 
     .redirect-message {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 15px;
       font-style: italic;
       color: #757575;
+      font-size: 0.9rem;
     }
 
     #countdown {
@@ -430,21 +403,20 @@ body {
       <p>You have two water jugs: a 5-liter jug and a 3-liter jug. Your goal is to measure exactly 4 liters of water in the 5-liter jug.</p>
       <p>Instructions:</p>
       <ul>
-        <li>Use the taps above each jug to fill them completely</li>
-        <li>Use the valves below to empty a jug entirely</li>
-        <li>Drag a jug onto the other to transfer water between them</li>
+        <li>Tap the faucet to fill a jug</li>
+        <li>Tap the trash to empty a jug</li>
+        <li>Drag a jug onto the other to transfer water</li>
       </ul>
     </div>
     <div class="goal">Goal: Get exactly 4 liters in the 5-liter jug</div>
     <div class="game-area">
       <div class="buckets-container">
         <div class="bucket" id="bucket5">
-          <div class="tap" onclick="fillBucket(5)"><i class="fa-solid fa-faucet"></i></div>
-          <div class="bucket-visual" draggable="true" ondragstart="drag(event, 5)">
+          <div class="tap" ontouchstart="fillBucket(5)"><i class="fa-solid fa-faucet"></i></div>
+          <div class="bucket-visual" draggable="true" ontouchstart="startDrag(event, 5)" ontouchend="endDrag(event)">
             <span class="bucket-label">5L</span>
             <div class="water" id="water5"></div>
             
-            <!-- Fixed markings outside the bucket -->
             <div class="water-markings">
               <div class="marking" style="top: 0%">
                 <div class="marking-line"></div>
@@ -467,20 +439,17 @@ body {
                 <div class="marking-text">1L</div>
               </div>
             </div>
-            <span class="bucket-label">5L</span>
-            <!-- Current level indicator - will appear at current water level -->
-            <div class="current-level" id="current-level5"> 0L</div>
+            <div class="current-level" id="current-level5">0L</div>
           </div>
-          <div class="bucket-info"> <span id="amount5">0</span>L Full</div>
-          <div class="valve" onclick="emptyBucket(5)"><i class="fa-solid fa-trash"></i></div>
+          <div class="bucket-info"><span id="amount5">0</span>L Full</div>
+          <div class="valve" ontouchstart="emptyBucket(5)"><i class="fa-solid fa-trash"></i></div>
         </div>
         <div class="bucket" id="bucket3">
-          <div class="tap" onclick="fillBucket(3)"><i class="fa-solid fa-faucet"></i></div>
-          <div class="bucket-visual" draggable="true" ondragstart="drag(event, 3)">
+          <div class="tap" ontouchstart="fillBucket(3)"><i class="fa-solid fa-faucet"></i></div>
+          <div class="bucket-visual" draggable="true" ontouchstart="startDrag(event, 3)" ontouchend="endDrag(event)">
             <span class="bucket-label">3L</span>
             <div class="water" id="water3"></div>
             
-            <!-- Fixed markings outside the bucket -->
             <div class="water-markings">
               <div class="marking" style="top: 0%">
                 <div class="marking-line"></div>
@@ -496,17 +465,16 @@ body {
               </div>
             </div>
             
-            <!-- Current level indicator - will appear at current water level -->
             <div class="current-level" id="current-level3">0L</div>
           </div>
           <div class="bucket-info"><span id="amount3">0</span>L Full</div>
-          <div class="valve" onclick="emptyBucket(3)"><i class="fa-solid fa-trash"></i></div>
+          <div class="valve" ontouchstart="emptyBucket(3)"><i class="fa-solid fa-trash"></i></div>
         </div>
       </div>
       <div class="drag-hint">Drag one jug onto another to transfer water</div>
     </div>
     <div class="actions">
-      <button onclick="resetGame()">Reset Game</button>
+      <button ontouchstart="resetGame()">Reset Game</button>
     </div>
   </div>
 
@@ -531,7 +499,9 @@ body {
       maxCapacity5: 5,
       maxCapacity3: 3,
       moves: 0,
-      dragSource: null
+      dragSource: null,
+      dragStartX: 0,
+      dragStartY: 0
     };
 
     // Initialize the game
@@ -540,13 +510,99 @@ body {
       document.getElementById('win-screen').style.display = 'none';
       updateVisuals();
       
-      // Set up drop zones
-      const buckets = document.querySelectorAll('.bucket-visual');
-      buckets.forEach(bucket => {
-        bucket.addEventListener('dragover', allowDrop);
-        bucket.addEventListener('drop', drop);
-      });
+      // Prevent default behavior for touch events
+      document.addEventListener('touchmove', function(e) {
+        if (state.dragSource !== null) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+      
+      // Set up touch events for mobile
+      setupTouchEvents();
     };
+
+    // Setup touch events
+    function setupTouchEvents() {
+      const buckets = document.querySelectorAll('.bucket-visual');
+      
+      // Add touch event listeners
+      buckets.forEach(bucket => {
+        bucket.addEventListener('touchmove', handleTouchMove);
+      });
+      
+      // Prevent scrolling when interacting with game elements
+      document.querySelectorAll('.tap, .valve, button').forEach(el => {
+        el.addEventListener('touchstart', e => e.preventDefault());
+      });
+    }
+
+    // Touch drag start
+    function startDrag(event, size) {
+      state.dragSource = size;
+      const touch = event.touches[0];
+      state.dragStartX = touch.clientX;
+      state.dragStartY = touch.clientY;
+      
+      // Visual feedback
+      event.currentTarget.style.opacity = '0.7';
+    }
+
+    // Touch drag end
+    function endDrag(event) {
+      if (state.dragSource === null) return;
+      
+      // Reset visual feedback
+      document.querySelectorAll('.bucket-visual').forEach(bucket => {
+        bucket.style.opacity = '1';
+        bucket.style.borderColor = '';
+      });
+      
+      state.dragSource = null;
+    }
+
+    // Handle touch move
+    function handleTouchMove(event) {
+      if (state.dragSource === null) return;
+      
+      const touch = event.touches[0];
+      const currentX = touch.clientX;
+      const currentY = touch.clientY;
+      
+      // Check if touch is over a bucket
+      const elementsAtPoint = document.elementsFromPoint(currentX, currentY);
+      const targetBucket = elementsAtPoint.find(el => 
+        el.classList.contains('bucket-visual') && 
+        el.parentElement.id !== 'bucket' + state.dragSource
+      );
+      
+      if (targetBucket) {
+        // Visual feedback for potential drop target
+        targetBucket.style.borderColor = '#4CAF50';
+        
+        // Check distance moved to determine if this is a drag or a tap
+        const distX = Math.abs(currentX - state.dragStartX);
+        const distY = Math.abs(currentY - state.dragStartY);
+        
+        if (distX > 10 || distY > 10) {
+          // Consider it a drag if moved more than 10px
+          const targetSize = targetBucket.parentElement.id === 'bucket5' ? 5 : 3;
+          
+          // Transfer water to target bucket
+          if (state.dragSource !== targetSize) {
+            transferWater(state.dragSource, targetSize);
+            
+            // Reset drag state
+            state.dragSource = null;
+            
+            // Reset visual feedback
+            document.querySelectorAll('.bucket-visual').forEach(bucket => {
+              bucket.style.opacity = '1';
+              bucket.style.borderColor = '';
+            });
+          }
+        }
+      }
+    }
 
     // Fill a bucket to capacity
     function fillBucket(size) {
@@ -567,48 +623,6 @@ body {
         state.bucket3 = 0;
       }
       updateVisuals();
-    }
-
-    // Drag start handler
-    function drag(event, size) {
-      state.dragSource = size;
-      
-      // Add visual feedback
-      event.target.style.opacity = '0.7';
-    }
-
-    // Allow drop
-    function allowDrop(event) {
-      event.preventDefault();
-      // Add visual feedback for drop target
-      event.target.style.borderColor = '#4CAF50';
-    }
-
-    // Handle drop
-    function drop(event) {
-      event.preventDefault();
-      
-      // Reset visual feedback
-      document.querySelectorAll('.bucket-visual').forEach(bucket => {
-        bucket.style.opacity = '1';
-        bucket.style.borderColor = '';
-      });
-      
-      // Get target bucket size
-      const targetElement = event.target.closest('.bucket-visual');
-      if (!targetElement) return;
-      
-      const targetBucketId = targetElement.parentElement.id;
-      const targetSize = targetBucketId === 'bucket5' ? 5 : 3;
-      
-      // Don't do anything if dragging to the same bucket
-      if (state.dragSource === targetSize) return;
-      
-      // Transfer water
-      transferWater(state.dragSource, targetSize);
-      
-      // Reset drag source
-      state.dragSource = null;
     }
 
     // Transfer water between buckets
@@ -711,7 +725,7 @@ body {
     function createConfetti() {
       const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
       
-      for (let i = 0; i < 150; i++) {
+      for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
         confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
