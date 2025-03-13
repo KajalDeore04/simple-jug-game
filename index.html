@@ -1,233 +1,726 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water jug Game</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #f5f5f5;
-            color: #333;
-        }
-        
-        h1 {
-            font-size: 1.5rem;
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .goal {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-weight: bold;
-        }
-        
-        .containers {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-        }
-        
-        .container {
-            width: 45%;
-            text-align: center;
-        }
-        
-        .vessel {
-            height: 150px;
-            border: 2px solid #333;
-            position: relative;
-            margin-bottom: 0.5rem;
-        }
-        
-        .barrel { border-radius: 10px; }
-        
-        .mug { 
-            border-radius: 5px 5px 15px 15px;
-        }
-        
-        .liquid {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: #8B4513;
-            transition: height 0.3s;
-        }
-        
-        .label {
-            font-size: 0.8rem;
-            margin-bottom: 1rem;
-        }
-        
-        button {
-            background: #ddd;
-            border: 1px solid #999;
-            border-radius: 3px;
-            padding: 5px 10px;
-            margin: 5px;
-            cursor: pointer;
-        }
-        
-        button:hover {
-            background: #ccc;
-        }
-        
-        .actions {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-        
-        .hints {
-            margin-top: 2rem;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        
-        .hint {
-            opacity: 0.2;
-            transition: opacity 1s ease-in-out;
-            margin: 5px 0;
-        }
-        
-        .hint.show {
-            opacity: 1;
-        }
-        
-        .hidden {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Jug Puzzle</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+  <style>
+    :root {
+      --primary-color: #1a73e8;
+      --secondary-color: #34a853;
+      --background-color: #f8f9fa;
+      --bucket-color: #4285f4;
+      --bucket-border: #2b579a;
+      --bucket-water: #88c4ff;
+      --text-color: #202124;
+      --button-color: #1a73e8;
+      --button-hover: #0d47a1;
+    }
+
+    body {
+      font-family: cursive;
+      background: linear-gradient(135deg, #e0f7fa, #bbdefb);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: var(--text-color);
+    }
+
+    .container {
+      width: 90%;
+      max-width: 600px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      padding: 20px;
+      margin: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      font-size: 1.8rem;
+    }
+
+    .instructions {
+      background-color: #f1f3f4;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .goal {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: var(--secondary-color);
+    }
+
+    .game-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .buckets-container {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .bucket {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      width: 120px;
+    }
+
+    .tap {
+      width: 30px;
+      height: 30px;
+      background-color: #9e9e9e;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+    }
+
+    .tap:hover {
+      background-color: #757575;
+      transform: scale(1.1);
+    }
+
+    .bucket-visual {
+      width: 80px;
+      border: 3px solid var(--bucket-border);
+      border-radius: 0 0 10px 10px;
+      background-color: #d3d3d3;
+      position: relative;
+      overflow: hidden;
+      cursor: grab;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #bucket5 .bucket-visual {
+      height: 150px; /* Larger bucket for 5L */
+    }
+
+    #bucket3 .bucket-visual {
+      height: 100px; /* Smaller bucket for 3L */
+    }
+
+    .bucket-visual:active {
+      cursor: grabbing;
+      transform: scale(1.05);
+    }
+
+    .bucket-label {
+      position: absolute;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      z-index: 2; /* Ensures it stays above the water */
+      pointer-events: none; /* Prevents interaction */
+    }
+
+    .water {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: var(--bucket-water);
+      transition: height 0.5s ease-out;
+    }
+
+    .bucket-info {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .valve {
+      width: 30px;
+      height: 30px;
+      background-color: #f44336;
+      border-radius: 50%;
+      cursor: pointer;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+    }
+
+    .valve:hover {
+      background-color: #d32f2f;
+      transform: scale(1.1);
+    }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: var(--button-color);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin: 0 5px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--button-hover);
+    }
+
+    .drag-hint {
+      text-align: center;
+      margin-top: 10px;
+      color: #757575;
+      font-style: italic;
+      font-size: 0.9rem;
+    }
+
+    /* FIXED: Water level markings - properly positioned outside the bucket */
+    .water-markings {
+      position: absolute;
+      right: -25px; /* Position markings outside the bucket */
+      height: 100%;
+      width: 30px; /* Width for the markings area */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+
+    .marking {
+      position: absolute;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .marking-line {
+      position: absolute;
+      left: -12px;
+      width: 10px;
+      height: 1px;
+      background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .marking-text {
+      position: absolute;
+      right: 0;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 1px 3px;
+      color: #333;
+    }
+
+    .current-level {
+      position: absolute;
+      right: -42px;
+      color: var(--primary-color);
+      font-weight: bold;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 2px 4px;
+      border-radius: 4px;
+      border: 1px solid var(--primary-color);
+      font-size: 1rem;
+      transition: all 0.5s ease-out;
+      z-index: 3;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .container {
+        width: 95%;
+        padding: 15px;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .current-level {
+        right: -35px;
+        font-size: 0.9rem;
+      }
+      
+      .buckets-container {
+        width: 90%;
+      }
+      
+      .marking-text {
+        right: 0;
+        font-size: 0.6rem;
+      }
+    }
+
+    #game-screen, #win-screen {
+      display: none;
+    }
+
+    /* Win screen styles */
+    .card-container {
+      perspective: 1000px;
+      width: 200px;
+      height: 250px;
+      margin: 20px auto;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: rotate 8s infinite linear;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.5rem;
+      background-image: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .card-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the entire area without distortion */
+  border-radius: 10px; /* Matches the card's border radius */
+}
+
+   
+    .card-back {
+      transform: rotateY(180deg);
+      background-image: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotateY(0);
+      }
+      100% {
+        transform: rotateY(360deg);
+      }
+    }
+
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      animation: fall 4s ease-out forwards;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-50vh) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) translateX(calc(var(--translateX) * 1px)) rotate(calc(var(--rotate) * 1deg));
+        opacity: 0;
+      }
+    }
+
+    .win-message {
+      text-align: center;
+      margin: 20px 0;
+      font-size: 1.8rem;
+      color: var(--secondary-color);
+      font-weight: bold;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .redirect-message {
+      text-align: center;
+      margin-top: 20px;
+      font-style: italic;
+      color: #757575;
+    }
+
+    #countdown {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <h1>Minimalist Rum Challenge</h1>
-    
-    <div class="goal">Goal: Measure exactly <strong>4 units</strong> of rum</div>
-    
-    <div class="containers">
-        <!-- 5L Barrel -->
-        <div class="container">
-            <div class="vessel barrel" id="barrel5">
-                <div class="liquid" id="liquid5"></div>
-            </div>
-            <div class="label">5-Unit Barrel</div>
-            <button id="fill5">Fill</button>
-            <button id="empty5">Empty</button>
-        </div>
-        
-        <!-- 3L Mug -->
-        <div class="container">
-            <div class="vessel mug" id="mug3">
-                <div class="liquid" id="liquid3"></div>
-            </div>
-            <div class="label">3-Unit Mug</div>
-            <button id="fill3">Fill</button>
-            <button id="empty3">Empty</button>
-        </div>
+  <div id="game-screen" class="container">
+    <h1>Water Jug Puzzle</h1>
+    <div class="instructions">
+      <p>You have two water jugs: a 5-liter jug and a 3-liter jug. Your goal is to measure exactly 4 liters of water in the 5-liter jug.</p>
+      <p>Instructions:</p>
+      <ul>
+        <li>Use the taps above each jug to fill them completely</li>
+        <li>Use the valves below to empty a jug entirely</li>
+        <li>Drag a jug onto the other to transfer water between them</li>
+      </ul>
     </div>
-    
+    <div class="goal">Goal: Get exactly 4 liters in the 5-liter jug</div>
+    <div class="game-area">
+      <div class="buckets-container">
+        <div class="bucket" id="bucket5">
+          <div class="tap" onclick="fillBucket(5)"><i class="fa-solid fa-faucet"></i></div>
+          <div class="bucket-visual" draggable="true" ondragstart="drag(event, 5)">
+            <span class="bucket-label">5L</span>
+            <div class="water" id="water5"></div>
+            
+            <!-- Fixed markings outside the bucket -->
+            <div class="water-markings">
+              <div class="marking" style="top: 0%">
+                <div class="marking-line"></div>
+                <div class="marking-text">5L</div>
+              </div>
+              <div class="marking" style="top: 20%">
+                <div class="marking-line"></div>
+                <div class="marking-text">4L</div>
+              </div>
+              <div class="marking" style="top: 40%">
+                <div class="marking-line"></div>
+                <div class="marking-text">3L</div>
+              </div>
+              <div class="marking" style="top: 60%">
+                <div class="marking-line"></div>
+                <div class="marking-text">2L</div>
+              </div>
+              <div class="marking" style="top: 80%">
+                <div class="marking-line"></div>
+                <div class="marking-text">1L</div>
+              </div>
+            </div>
+            <span class="bucket-label">5L</span>
+            <!-- Current level indicator - will appear at current water level -->
+            <div class="current-level" id="current-level5"> 0L</div>
+          </div>
+          <div class="bucket-info"> <span id="amount5">0</span>L Full</div>
+          <div class="valve" onclick="emptyBucket(5)"><i class="fa-solid fa-trash"></i></div>
+        </div>
+        <div class="bucket" id="bucket3">
+          <div class="tap" onclick="fillBucket(3)"><i class="fa-solid fa-faucet"></i></div>
+          <div class="bucket-visual" draggable="true" ondragstart="drag(event, 3)">
+            <span class="bucket-label">3L</span>
+            <div class="water" id="water3"></div>
+            
+            <!-- Fixed markings outside the bucket -->
+            <div class="water-markings">
+              <div class="marking" style="top: 0%">
+                <div class="marking-line"></div>
+                <div class="marking-text">3L</div>
+              </div>
+              <div class="marking" style="top: 33%">
+                <div class="marking-line"></div>
+                <div class="marking-text">2L</div>
+              </div>
+              <div class="marking" style="top: 66%">
+                <div class="marking-line"></div>
+                <div class="marking-text">1L</div>
+              </div>
+            </div>
+            
+            <!-- Current level indicator - will appear at current water level -->
+            <div class="current-level" id="current-level3">0L</div>
+          </div>
+          <div class="bucket-info"><span id="amount3">0</span>L Full</div>
+          <div class="valve" onclick="emptyBucket(3)"><i class="fa-solid fa-trash"></i></div>
+        </div>
+      </div>
+      <div class="drag-hint">Drag one jug onto another to transfer water</div>
+    </div>
     <div class="actions">
-        <button id="transfer5to3">Barrel → Mug</button>
-        <button id="transfer3to5">Mug → Barrel</button>
+      <button onclick="resetGame()">Reset Game</button>
     </div>
-    
-    <div class="hints">
-        <ul id="hint-list">
-            <li class="hint" id="hint1">Fill the 5L barrel completely.</li>
-            <li class="hint" id="hint2">Pour from the 5L barrel into the 3L mug until it is full.</li>
-            <li class="hint" id="hint3">Empty the 3L mug.</li>
-            <li class="hint" id="hint4">Transfer the remaining 2L from the 5L barrel to the 3L mug.</li>
-            <li class="hint" id="hint5">Fill the 5L barrel again.</li>
-            <li class="hint" id="hint6">Pour from the 5L barrel into the 3L mug until it is full.</li>
-            <li class="hint" id="hint7">Now, the 5L barrel contains exactly 4L! 🎉</li>
-        </ul>
-    </div>
+  </div>
 
-    <script>
-        // Game state
-        let barrel5Content = 0;
-        let mug3Content = 0;
-        let moveCounter = 0;
-        
-        // DOM Elements
-        const barrel5El = document.getElementById('barrel5');
-        const mug3El = document.getElementById('mug3');
-        const liquid5El = document.getElementById('liquid5');
-        const liquid3El = document.getElementById('liquid3');
-        
-        // Update visual state
-        function updateDisplay() {
-            liquid5El.style.height = (barrel5Content / 5 * 100) + '%';
-            liquid3El.style.height = (mug3Content / 3 * 100) + '%';
+  <div id="win-screen" class="container">
+    <div class="win-message">Congratulations! You've solved the puzzle!</div>
+    <div class="card-container">
+      <div class="card">
+        <div class="card-face card-front"><img src="b.png" alt=""></div>
+        <div class="card-face card-back"><img src="f.jpeg" alt=""></div>
+      </div>
+    </div>
+    <div class="redirect-message">
+      Redirecting to form in <span id="countdown">10</span> seconds...
+    </div>
+  </div>
+
+  <script>
+    // Game state
+    const state = {
+      bucket5: 0,
+      bucket3: 0,
+      maxCapacity5: 5,
+      maxCapacity3: 3,
+      moves: 0,
+      dragSource: null
+    };
+
+    // Initialize the game
+    window.onload = function() {
+      document.getElementById('game-screen').style.display = 'block';
+      document.getElementById('win-screen').style.display = 'none';
+      updateVisuals();
+      
+      // Set up drop zones
+      const buckets = document.querySelectorAll('.bucket-visual');
+      buckets.forEach(bucket => {
+        bucket.addEventListener('dragover', allowDrop);
+        bucket.addEventListener('drop', drop);
+      });
+    };
+
+    // Fill a bucket to capacity
+    function fillBucket(size) {
+      if (size === 5) {
+        state.bucket5 = state.maxCapacity5;
+      } else {
+        state.bucket3 = state.maxCapacity3;
+      }
+      updateVisuals();
+      checkWin();
+    }
+
+    // Empty a bucket
+    function emptyBucket(size) {
+      if (size === 5) {
+        state.bucket5 = 0;
+      } else {
+        state.bucket3 = 0;
+      }
+      updateVisuals();
+    }
+
+    // Drag start handler
+    function drag(event, size) {
+      state.dragSource = size;
+      
+      // Add visual feedback
+      event.target.style.opacity = '0.7';
+    }
+
+    // Allow drop
+    function allowDrop(event) {
+      event.preventDefault();
+      // Add visual feedback for drop target
+      event.target.style.borderColor = '#4CAF50';
+    }
+
+    // Handle drop
+    function drop(event) {
+      event.preventDefault();
+      
+      // Reset visual feedback
+      document.querySelectorAll('.bucket-visual').forEach(bucket => {
+        bucket.style.opacity = '1';
+        bucket.style.borderColor = '';
+      });
+      
+      // Get target bucket size
+      const targetElement = event.target.closest('.bucket-visual');
+      if (!targetElement) return;
+      
+      const targetBucketId = targetElement.parentElement.id;
+      const targetSize = targetBucketId === 'bucket5' ? 5 : 3;
+      
+      // Don't do anything if dragging to the same bucket
+      if (state.dragSource === targetSize) return;
+      
+      // Transfer water
+      transferWater(state.dragSource, targetSize);
+      
+      // Reset drag source
+      state.dragSource = null;
+    }
+
+    // Transfer water between buckets
+    function transferWater(sourceSize, targetSize) {
+      if (sourceSize === 5 && targetSize === 3) {
+        // Transfer from 5L to 3L
+        const spaceIn3 = state.maxCapacity3 - state.bucket3;
+        if (spaceIn3 > 0 && state.bucket5 > 0) {
+          const amountToTransfer = Math.min(state.bucket5, spaceIn3);
+          state.bucket3 += amountToTransfer;
+          state.bucket5 -= amountToTransfer;
         }
-        
-        // Button event listeners
-        document.getElementById('fill5').addEventListener('click', () => {
-            barrel5Content = 5;
-            updateDisplay();
-            checkWin();
-        });
-        
-        document.getElementById('fill3').addEventListener('click', () => {
-            mug3Content = 3;
-            updateDisplay();
-            checkWin();
-        });
-        
-        document.getElementById('empty5').addEventListener('click', () => {
-            barrel5Content = 0;
-            updateDisplay();
-        });
-        
-        document.getElementById('empty3').addEventListener('click', () => {
-            mug3Content = 0;
-            updateDisplay();
-        });
-        
-        document.getElementById('transfer5to3').addEventListener('click', () => {
-            const transferAmount = Math.min(barrel5Content, 3 - mug3Content);
-            barrel5Content -= transferAmount;
-            mug3Content += transferAmount;
-            updateDisplay();
-            checkWin();
-        });
-        
-        document.getElementById('transfer3to5').addEventListener('click', () => {
-            const transferAmount = Math.min(mug3Content, 5 - barrel5Content);
-            mug3Content -= transferAmount;
-            barrel5Content += transferAmount;
-            updateDisplay();
-            checkWin();
-        });
-        
-        // Check win condition
-        function checkWin() {
-            if (barrel5Content === 4 || mug3Content === 4) {
-                // Store moves for win page
-                localStorage.setItem("moves", moveCounter);
-                // Redirect to win page
-                window.location.href = "win.html";
-            }
+      } else {
+        // Transfer from 3L to 5L
+        const spaceIn5 = state.maxCapacity5 - state.bucket5;
+        if (spaceIn5 > 0 && state.bucket3 > 0) {
+          const amountToTransfer = Math.min(state.bucket3, spaceIn5);
+          state.bucket5 += amountToTransfer;
+          state.bucket3 -= amountToTransfer;
         }
+      }
+      
+      state.moves++;
+      updateVisuals();
+      checkWin();
+    }
+
+    // Update visual representation of water
+    function updateVisuals() {
+      // Update 5L jug
+      document.getElementById('amount5').textContent = state.bucket5;
+      const water5 = document.getElementById('water5');
+      const height5 = (state.bucket5 / state.maxCapacity5) * 100;
+      water5.style.height = height5 + '%';
+      
+      // Update current level indicator position for 5L bucket
+      const currentLevel5 = document.getElementById('current-level5');
+      currentLevel5.textContent = state.bucket5 + 'L';
+      
+      // Position the current level indicator based on water height
+      if (state.bucket5 > 0) {
+        const bucket5Height = document.querySelector('#bucket5 .bucket-visual').offsetHeight;
+        const position = bucket5Height - (height5 * bucket5Height / 100);
+        currentLevel5.style.top = position + 'px';
+        currentLevel5.style.display = 'block';
+      } else {
+        currentLevel5.style.display = 'none';
+      }
+      
+      // Update 3L jug
+      document.getElementById('amount3').textContent = state.bucket3;
+      const water3 = document.getElementById('water3');
+      const height3 = (state.bucket3 / state.maxCapacity3) * 100;
+      water3.style.height = height3 + '%';
+      
+      // Update current level indicator position for 3L bucket
+      const currentLevel3 = document.getElementById('current-level3');
+      currentLevel3.textContent = state.bucket3 + 'L';
+      
+      // Position the current level indicator based on water height
+      if (state.bucket3 > 0) {
+        const bucket3Height = document.querySelector('#bucket3 .bucket-visual').offsetHeight;
+        const position = bucket3Height - (height3 * bucket3Height / 100);
+        currentLevel3.style.top = position + 'px';
+        currentLevel3.style.display = 'block';
+      } else {
+        currentLevel3.style.display = 'none';
+      }
+    }
+
+    // Check if the win condition is met
+    function checkWin() {
+      if (state.bucket5 === 4) {
+        // Show win screen
+        showWinScreen();
+      }
+    }
+
+    // Reset the game
+    function resetGame() {
+      state.bucket5 = 0;
+      state.bucket3 = 0;
+      state.moves = 0;
+      updateVisuals();
+    }
+
+    // Show the win screen
+    function showWinScreen() {
+      document.getElementById('game-screen').style.display = 'none';
+      document.getElementById('win-screen').style.display = 'block';
+      
+      // Create confetti effect
+      createConfetti();
+      
+      // Start countdown for redirect
+      startCountdown();
+    }
+
+    // Create confetti effect
+    function createConfetti() {
+      const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50', '#8BC34A', '#CDDC39', '#FFEB3B', '#FFC107', '#FF9800', '#FF5722'];
+      
+      for (let i = 0; i < 150; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        confetti.style.setProperty('--translateX', Math.random() * 100 - 50);
+        confetti.style.setProperty('--rotate', Math.random() * 360);
         
-        // Show hints progressively
-        const hints = document.querySelectorAll(".hint");
-        let delay = 1000; // Start revealing after 1 second
+        document.body.appendChild(confetti);
         
-        hints.forEach((hint, index) => {
-            setTimeout(() => {
-                hint.classList.add("show");
-            }, delay);
-            delay += 3000; // Each hint appears every 3 seconds
-        });
+        // Remove confetti after animation
+        setTimeout(() => {
+          confetti.remove();
+        }, 6000);
+      }
+    }
+
+    // Start countdown for redirect
+    function startCountdown() {
+      let seconds = 10;
+      const countdownElement = document.getElementById('countdown');
+      
+      const timer = setInterval(() => {
+        seconds--;
+        countdownElement.textContent = seconds;
         
-        // Initialize display
-        updateDisplay();
-    </script>
+        if (seconds <= 0) {
+          clearInterval(timer);
+          // Redirect to Google Form
+          window.location.href = 'https://docs.google.com/forms/d/e/1FAIpQLSc_VB_2bODsMvn5RlciD1nONL6cZ7AiUst0zcQpoXrprimSiw/viewform';
+        }
+      }, 1000);
+    }
+  </script>
 </body>
 </html>
