@@ -9,7 +9,6 @@
     :root {
       --primary-color: #1a73e8;
       --secondary-color: #34a853;
-      --background-color: #f8f9fa;
       --bucket-color: #4285f4;
       --bucket-border: #2b579a;
       --bucket-water: #88c4ff;
@@ -35,72 +34,70 @@
 
     body {
       font-family: Arial, sans-serif;
-      background-color: white;
+      color: var(--text-color);
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      color: var(--text-color);
-    }
-
-    .container {
-      width: 100%;
-      height: 100%;
-      background-color: white;
-      padding: 15px;
-      display: flex;
-      flex-direction: column;
+      justify-content: space-between;
+      height: 100vh;
+      width: 100vw;
+      padding: 10px;
     }
 
     h1 {
       text-align: center;
       color: var(--primary-color);
-      margin: 5px 0 10px 0;
-      font-size: 1.5rem;
+      margin: 10px 0;
+      font-size: 1.8rem;
     }
 
     .instructions {
       background-color: #f1f3f4;
-      padding: 10px;
+      padding: 12px;
       border-radius: 8px;
       margin-bottom: 15px;
-      font-size: 0.85rem;
-      line-height: 1.3;
+      font-size: 1rem;
+      line-height: 1.4;
       border-left: 4px solid var(--primary-color);
-      flex-shrink: 0;
+      width: 100%;
     }
 
     .instructions p {
-      margin: 5px 0;
+      margin: 6px 0;
     }
 
     .instructions ul {
-      margin: 5px 0;
+      margin: 6px 0;
       padding-left: 20px;
     }
 
     .goal {
       text-align: center;
       font-weight: bold;
-      margin-bottom: 10px;
+      margin: 15px 0;
       color: var(--secondary-color);
-      font-size: 0.95rem;
+      font-size: 1.2rem;
+      width: 100%;
     }
 
     .game-area {
       display: flex;
       flex-direction: column;
       align-items: center;
-      flex-grow: 1;
-      margin-bottom: 10px;
+      width: 100%;
+      flex: 1;
+      margin-bottom: 15px;
+      justify-content: center;
     }
 
     .buckets-container {
       display: flex;
       justify-content: space-around;
       width: 100%;
-      margin-bottom: 15px;
-      flex-grow: 1;
+      margin: 20px 0;
+      flex: 1;
+      min-height: 50vh;
+      align-items: center;
     }
 
     .bucket {
@@ -108,23 +105,24 @@
       flex-direction: column;
       align-items: center;
       position: relative;
-      width: 40%;
-      max-width: 120px;
+      width: 45%;
+      max-width: 150px;
+      height: 100%;
     }
 
     .tap {
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
       background-color: #9e9e9e;
       border-radius: 50%;
       cursor: pointer;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 22px;
       color: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
       transition: all 0.3s;
     }
 
@@ -135,13 +133,13 @@
 
     .bucket-visual {
       width: 100%;
-      border: 3px solid var(--bucket-border);
-      border-radius: 0 0 10px 10px;
+      border: 4px solid var(--bucket-border);
+      border-radius: 0 0 12px 12px;
       background-color: #d3d3d3;
       position: relative;
       overflow: hidden;
-      margin-bottom: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.15);
       transition: transform 0.2s;
       text-align: center;
       display: flex;
@@ -150,11 +148,11 @@
     }
 
     #bucket5 .bucket-visual {
-      height: 140px;
+      height: 200px;
     }
 
     #bucket3 .bucket-visual {
-      height: 90px;
+      height: 130px;
     }
 
     .bucket-visual:active {
@@ -163,7 +161,7 @@
 
     .bucket-label {
       position: absolute;
-      font-size: 1.1rem;
+      font-size: 1.4rem;
       font-weight: bold;
       color: white;
       text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
@@ -183,23 +181,23 @@
     .bucket-info {
       text-align: center;
       font-weight: bold;
-      margin-top: 5px;
-      font-size: 0.9rem;
+      margin-top: 10px;
+      font-size: 1.2rem;
     }
 
     .valve {
-      width: 30px;
-      height: 30px;
+      width: 40px;
+      height: 40px;
       background-color: #f44336;
       border-radius: 50%;
       cursor: pointer;
-      margin-top: 5px;
+      margin-top: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 22px;
       color: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
       transition: all 0.3s;
     }
 
@@ -211,20 +209,21 @@
     .actions {
       display: flex;
       justify-content: center;
-      margin-top: 10px;
-      margin-bottom: 10px;
+      margin: 15px 0 20px 0;
+      width: 100%;
     }
 
     button {
       background-color: var(--button-color);
       color: white;
       border: none;
-      padding: 10px 15px;
-      border-radius: 5px;
+      padding: 15px 20px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 1.1rem;
       margin: 0 5px;
       transition: background-color 0.3s;
+      min-width: 120px;
     }
 
     button:active {
@@ -233,17 +232,17 @@
 
     .drag-hint {
       text-align: center;
-      margin-top: 5px;
-      color: #757575;
+      margin: 15px 0;
+      color: #575757;
       font-style: italic;
-      font-size: 0.8rem;
+      font-size: 1rem;
     }
 
     .water-markings {
       position: absolute;
-      right: -20px;
+      right: -25px;
       height: 100%;
-      width: 20px;
+      width: 25px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -259,8 +258,8 @@
 
     .marking-line {
       position: absolute;
-      left: -5px;
-      width: 5px;
+      left: -6px;
+      width: 6px;
       height: 1px;
       background-color: rgba(0, 0, 0, 0.7);
     }
@@ -268,7 +267,7 @@
     .marking-text {
       position: absolute;
       right: 0;
-      font-size: 0.65rem;
+      font-size: 0.8rem;
       font-weight: bold;
       padding: 1px;
       color: #333;
@@ -276,28 +275,32 @@
 
     .current-level {
       position: absolute;
-      right: -32px;
+      right: -38px;
       color: var(--primary-color);
       font-weight: bold;
       background-color: rgba(255, 255, 255, 0.8);
-      padding: 1px 3px;
-      border-radius: 3px;
+      padding: 2px 4px;
+      border-radius: 4px;
       border: 1px solid var(--primary-color);
-      font-size: 0.8rem;
+      font-size: 1rem;
       transition: all 0.5s ease-out;
       z-index: 3;
     }
 
     #game-screen, #win-screen {
       display: none;
+      width: 100%;
       height: 100%;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .card-container {
       perspective: 1000px;
-      width: 180px;
-      height: 220px;
-      margin: 15px auto;
+      width: 220px;
+      height: 270px;
+      margin: 20px auto;
     }
 
     .card {
@@ -306,7 +309,7 @@
       position: relative;
       transform-style: preserve-3d;
       animation: rotate 8s infinite linear;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
     }
 
     .card-face {
@@ -314,22 +317,22 @@
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       background-image: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
       color: white;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
     }
 
     .card-face img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 10px;
+      border-radius: 12px;
     }
    
     .card-back {
@@ -348,9 +351,9 @@
 
     .confetti {
       position: fixed;
-      width: 10px;
-      height: 10px;
-      border-radius: 2px;
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
       z-index: 1000;
       opacity: 0;
       pointer-events: none;
@@ -370,8 +373,8 @@
 
     .win-message {
       text-align: center;
-      margin: 15px 0;
-      font-size: 1.5rem;
+      margin: 25px 0;
+      font-size: 1.8rem;
       color: var(--secondary-color);
       font-weight: bold;
       animation: pulse 2s infinite;
@@ -385,10 +388,10 @@
 
     .redirect-message {
       text-align: center;
-      margin-top: 15px;
+      margin: 20px 0;
       font-style: italic;
       color: #757575;
-      font-size: 0.9rem;
+      font-size: 1.1rem;
     }
 
     #countdown {
@@ -397,7 +400,7 @@
   </style>
 </head>
 <body>
-  <div id="game-screen" class="container">
+  <div id="game-screen">
     <h1>Water Jug Puzzle</h1>
     <div class="instructions">
       <p>You have two water jugs: a 5-liter jug and a 3-liter jug. Your goal is to measure exactly 4 liters of water in the 5-liter jug.</p>
@@ -478,7 +481,7 @@
     </div>
   </div>
 
-  <div id="win-screen" class="container">
+  <div id="win-screen">
     <div class="win-message">Congratulations! You've solved the puzzle!</div>
     <div class="card-container">
       <div class="card">
@@ -506,7 +509,7 @@
 
     // Initialize the game
     window.onload = function() {
-      document.getElementById('game-screen').style.display = 'block';
+      document.getElementById('game-screen').style.display = 'flex';
       document.getElementById('win-screen').style.display = 'none';
       updateVisuals();
       
@@ -519,7 +522,29 @@
       
       // Set up touch events for mobile
       setupTouchEvents();
+      
+      // Adjust the height to use full screen
+      adjustHeight();
+      window.addEventListener('resize', adjustHeight);
     };
+    
+    // Adjust component heights to use full screen
+    function adjustHeight() {
+      const screenHeight = window.innerHeight;
+      const gameScreen = document.getElementById('game-screen');
+      gameScreen.style.height = screenHeight + 'px';
+      
+      // Make sure buckets-container has enough space
+      const header = document.querySelector('h1').offsetHeight;
+      const instructions = document.querySelector('.instructions').offsetHeight;
+      const goal = document.querySelector('.goal').offsetHeight;
+      const actions = document.querySelector('.actions').offsetHeight;
+      const dragHint = document.querySelector('.drag-hint').offsetHeight;
+      
+      const availableHeight = screenHeight - header - instructions - goal - actions - dragHint - 60; // extra padding
+      const bucketsContainer = document.querySelector('.buckets-container');
+      bucketsContainer.style.minHeight = availableHeight + 'px';
+    }
 
     // Setup touch events
     function setupTouchEvents() {
@@ -712,7 +737,7 @@
     // Show the win screen
     function showWinScreen() {
       document.getElementById('game-screen').style.display = 'none';
-      document.getElementById('win-screen').style.display = 'block';
+      document.getElementById('win-screen').style.display = 'flex';
       
       // Create confetti effect
       createConfetti();
